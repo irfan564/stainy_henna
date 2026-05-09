@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Log In | Stainy Henna{% endblock %}
+
+{% block content %}
+<section class="relative py-24 min-h-screen flex items-center justify-center bg-cover bg-center bg-no-repeat" style="background-image: url('https://images.unsplash.com/photo-1596400619079-0db35c345b1e?q=80&w=2070&auto=format&fit=crop');">
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-maroon-900/40 mix-blend-multiply"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-maroon-900/90 via-transparent to-transparent"></div>
+
+    <div class="relative z-10 w-full max-w-md px-4" data-aos="fade-up">
+        <!-- Glassmorphism Container -->
+        <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 md:p-12 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
+            
+            <div class="text-center mb-10">
+                <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30 backdrop-blur-sm">
+                    <i class="fas fa-user text-2xl text-gold-300"></i>
+                </div>
+                <h1 class="font-heading text-4xl font-bold text-white mb-2">Welcome Back</h1>
+                <p class="text-gold-200 text-sm">Log in to manage your bookings and orders.</p>
+            </div>
+
+            <form method="POST" class="space-y-5">
+                {% csrf_token %}
+                
+                <div>
+                    <label class="block text-white/80 text-sm font-medium mb-1 pl-1">Email Address</label>
+                    {{ form.username }}
+                    {% if form.username.errors %}<p class="text-red-300 text-xs mt-1 pl-1">{{ form.username.errors.0 }}</p>{% endif %}
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-1 pl-1 pr-1">
+                        <label class="block text-white/80 text-sm font-medium">Password</label>
+                        <a href="{% url 'accounts:password_reset' %}" class="text-xs text-gold-300 hover:text-gold-400 transition-colors">Forgot Password?</a>
+                    </div>
+                    {{ form.password }}
+                    {% if form.password.errors %}<p class="text-red-300 text-xs mt-1 pl-1">{{ form.password.errors.0 }}</p>{% endif %}
+                </div>
+
+                {% if form.non_field_errors %}
+                <div class="bg-red-500/20 backdrop-blur-md border border-red-500/50 text-white text-sm p-4 rounded-xl mt-4">
+                    {% for error in form.non_field_errors %}
+                        <p><i class="fas fa-exclamation-circle mr-1"></i> {{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <button type="submit" class="w-full py-4 mt-8 bg-gradient-to-r from-gold-400 to-gold-600 text-maroon-900 font-bold rounded-xl shadow-[0_4px_15px_rgba(200,169,81,0.4)] hover:shadow-[0_8px_25px_rgba(200,169,81,0.6)] transform hover:-translate-y-1 transition-all duration-300">
+                    Log In <i class="fas fa-sign-in-alt ml-2"></i>
+                </button>
+            </form>
+
+            <div class="mt-8 text-center border-t border-white/20 pt-6">
+                <p class="text-white/80 text-sm">Don't have an account? 
+                    <a href="{% url 'accounts:register' %}" class="text-gold-300 font-bold hover:text-gold-400 hover:underline transition-colors ml-1">Sign Up</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

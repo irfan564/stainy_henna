@@ -1,0 +1,58 @@
+<!-- Footer -->
+<footer class="bg-gradient-to-b from-maroon-800 to-maroon-900 text-white mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+            <div>
+                <div class="flex items-center space-x-2 mb-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-gold-400 to-gold-600 rounded-full flex items-center justify-center">
+                        <span class="text-maroon-900 font-heading font-bold text-lg">S</span>
+                    </div>
+                    <div>
+                        <h3 class="font-heading text-xl font-bold text-gold-400">Stainy Henna</h3>
+                        <p class="text-[10px] text-gold-300/60 tracking-widest uppercase -mt-1">Luxury Mehandi Art</p>
+                    </div>
+                </div>
+                <p class="text-gray-300 text-sm leading-relaxed mb-6">Creating exquisite mehandi designs that celebrate tradition with a modern touch.</p>
+                <div class="flex space-x-3">
+                    <a href="https://www.instagram.com/stainy._hennah?igsh=MWIzZ291cnk1a250cw==" target="_blank" class="w-10 h-10 rounded-full bg-white/10 hover:bg-gold-500 flex items-center justify-center transition-all duration-300"><i class="fab fa-instagram"></i></a>
+                    <a href="https://wa.me/{{ whatsapp_number }}?text={{ whatsapp_message|urlencode }}" target="_blank" class="w-10 h-10 rounded-full bg-white/10 hover:bg-green-500 flex items-center justify-center transition-all duration-300"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="font-heading text-lg font-semibold text-gold-400 mb-6">Quick Links</h4>
+                <ul class="space-y-3">
+                    <li><a href="{% url 'core:home' %}" class="text-gray-300 hover:text-gold-400 transition-colors text-sm"><i class="fas fa-chevron-right text-xs mr-2 text-gold-500/50"></i>Home</a></li>
+                    <li><a href="{% url 'core:about' %}" class="text-gray-300 hover:text-gold-400 transition-colors text-sm"><i class="fas fa-chevron-right text-xs mr-2 text-gold-500/50"></i>About</a></li>
+                    <li><a href="{% url 'services:service_list' %}" class="text-gray-300 hover:text-gold-400 transition-colors text-sm"><i class="fas fa-chevron-right text-xs mr-2 text-gold-500/50"></i>Services</a></li>
+                    <li><a href="{% url 'shop:product_list' %}" class="text-gray-300 hover:text-gold-400 transition-colors text-sm"><i class="fas fa-chevron-right text-xs mr-2 text-gold-500/50"></i>Shop</a></li>
+                    <li><a href="{% url 'bookings:booking_create' %}" class="text-gray-300 hover:text-gold-400 transition-colors text-sm"><i class="fas fa-chevron-right text-xs mr-2 text-gold-500/50"></i>Book Now</a></li>
+                    <li><a href="{% url 'core:contact' %}" class="text-gray-300 hover:text-gold-400 transition-colors text-sm"><i class="fas fa-chevron-right text-xs mr-2 text-gold-500/50"></i>Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-heading text-lg font-semibold text-gold-400 mb-6">Services</h4>
+                <ul class="space-y-3">
+                    <li class="text-gray-300 text-sm"><i class="fas fa-star text-xs mr-2 text-gold-500/50"></i>Bridal Mehandi</li>
+                    <li class="text-gray-300 text-sm"><i class="fas fa-star text-xs mr-2 text-gold-500/50"></i>Party Mehandi</li>
+                    <li class="text-gray-300 text-sm"><i class="fas fa-star text-xs mr-2 text-gold-500/50"></i>Festival Mehandi</li>
+                    <li class="text-gray-300 text-sm"><i class="fas fa-star text-xs mr-2 text-gold-500/50"></i>Arabic Designs</li>
+                    <li class="text-gray-300 text-sm"><i class="fas fa-star text-xs mr-2 text-gold-500/50"></i>Kids Mehandi</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-heading text-lg font-semibold text-gold-400 mb-6">Contact</h4>
+                <ul class="space-y-4">
+                    <li class="flex items-start space-x-3"><i class="fas fa-map-marker-alt text-gold-500 mt-1"></i><span class="text-gray-300 text-sm">{{ business_address }}</span></li>
+                    <li class="flex items-center space-x-3"><i class="fas fa-phone text-gold-500"></i><a href="tel:{{ business_phone }}" class="text-gray-300 hover:text-gold-400 text-sm">{{ business_phone }}</a></li>
+                    <li class="flex items-center space-x-3"><i class="fas fa-envelope text-gold-500"></i><a href="mailto:{{ business_email }}" class="text-gray-300 hover:text-gold-400 text-sm">{{ business_email }}</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col sm:flex-row justify-between items-center">
+            <p class="text-gray-400 text-sm">&copy; 2026 Stainy Henna. All rights reserved.</p>
+            <p class="text-gray-500 text-xs">Crafted with <i class="fas fa-heart text-red-400"></i> for beautiful traditions</p>
+        </div>
+    </div>
+</footer>

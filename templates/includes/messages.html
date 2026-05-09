@@ -1,0 +1,26 @@
+<!-- Messages -->
+{% if messages %}
+<div class="fixed top-24 right-4 z-50 space-y-3 max-w-sm" id="message-container">
+    {% for message in messages %}
+    <div class="message-alert flex items-center p-4 rounded-xl shadow-xl border backdrop-blur-sm transform translate-x-full animate-slide-in
+        {% if message.tags == 'success' %}bg-green-50 border-green-200 text-green-800
+        {% elif message.tags == 'error' %}bg-red-50 border-red-200 text-red-800
+        {% elif message.tags == 'warning' %}bg-yellow-50 border-yellow-200 text-yellow-800
+        {% elif message.tags == 'info' %}bg-blue-50 border-blue-200 text-blue-800
+        {% else %}bg-gray-50 border-gray-200 text-gray-800{% endif %}"
+        role="alert">
+        <i class="mr-3 text-lg
+            {% if message.tags == 'success' %}fas fa-check-circle text-green-500
+            {% elif message.tags == 'error' %}fas fa-exclamation-circle text-red-500
+            {% elif message.tags == 'warning' %}fas fa-exclamation-triangle text-yellow-500
+            {% elif message.tags == 'info' %}fas fa-info-circle text-blue-500
+            {% else %}fas fa-bell text-gray-500{% endif %}">
+        </i>
+        <p class="text-sm font-medium flex-1">{{ message }}</p>
+        <button onclick="this.parentElement.remove()" class="ml-3 text-gray-400 hover:text-gray-600 transition-colors">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}

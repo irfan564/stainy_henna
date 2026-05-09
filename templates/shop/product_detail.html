@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<section class="py-12 bg-gradient-to-b from-cream-100 to-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <nav class="mb-8 text-sm" data-aos="fade-up">
+            <a href="{% url 'shop:product_list' %}" class="text-gray-500 hover:text-maroon-500">Shop</a>
+            <span class="mx-2 text-gray-400">/</span>
+            <span class="text-maroon-600 font-medium">{{ product.name }}</span>
+        </nav>
+
+        <div class="grid lg:grid-cols-2 gap-12" data-aos="fade-up">
+            <div>
+                <div class="rounded-2xl overflow-hidden shadow-xl">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-[450px] object-cover">
+                    {% else %}
+                    <div class="w-full h-[450px] bg-gradient-to-br from-gold-100 to-maroon-100 flex items-center justify-center">
+                        <i class="fas fa-box text-8xl text-maroon-300/50"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                {% if product.image_2 or product.image_3 %}
+                <div class="grid grid-cols-2 gap-4 mt-4">
+                    {% if product.image_2 %}
+                    <img src="{{ product.image_2.url }}" alt="{{ product.name }}" class="w-full h-32 object-cover rounded-xl shadow-md">
+                    {% endif %}
+                    {% if product.image_3 %}
+                    <img src="{{ product.image_3.url }}" alt="{{ product.name }}" class="w-full h-32 object-cover rounded-xl shadow-md">
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div>
+                <span class="text-gold-600 font-medium tracking-widest uppercase text-sm">{{ product.category.name }}</span>
+                <h1 class="font-heading text-4xl font-bold text-maroon-800 mt-2">{{ product.name }}</h1>
+
+                <div class="mt-4">
+                    {% if product.has_discount %}
+                    <span class="text-gray-400 line-through text-xl">₹{{ product.price }}</span>
+                    <span class="text-maroon-600 font-bold text-3xl ml-2 font-heading">₹{{ product.discount_price }}</span>
+                    <span class="ml-3 bg-red-100 text-red-600 text-sm font-bold px-3 py-1 rounded-full">SAVE ₹{{ product.price|add:"-"|add:product.discount_price }}</span>
+                    {% else %}
+                    <span class="text-maroon-600 font-bold text-3xl font-heading">₹{{ product.price }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="mt-3">
+                    {% if product.in_stock %}
+                    <span class="text-green-600 text-sm font-medium"><i class="fas fa-check-circle mr-1"></i> In Stock ({{ product.stock }} available)</span>
+                    {% else %}
+                    <span class="text-red-500 text-sm font-medium"><i class="fas fa-times-circle mr-1"></i> Out of Stock</span>
+                    {% endif %}
+                </div>
+
+                <div class="mt-6 text-gray-600 leading-relaxed">
+                    <p>{{ product.description }}</p>
+                </div>
+
+                {% if product.in_stock %}
+                <div class="mt-8">
+                    <a href="{% url 'shop:add_to_cart' product.pk %}" class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-gold-500 to-gold-600 text-maroon-900 rounded-full font-bold text-lg hover:from-gold-400 hover:to-gold-500 shadow-xl transition-all transform hover:scale-105">
+                        <i class="fas fa-shopping-bag mr-2"></i> Add to Cart
+                    </a>
+                </div>
+                {% endif %}
+
+                <div class="mt-8 grid grid-cols-2 gap-4 p-6 bg-cream-50 rounded-2xl border border-gold-100">
+                    <div class="flex items-center space-x-2 text-sm text-gray-700">
+                        <i class="fas fa-truck text-gold-500"></i><span>Fast Delivery</span>
+                    </div>
+                    <div class="flex items-center space-x-2 text-sm text-gray-700">
+                        <i class="fas fa-shield-alt text-gold-500"></i><span>Quality Guaranteed</span>
+                    </div>
+                    <div class="flex items-center space-x-2 text-sm text-gray-700">
+                        <i class="fas fa-leaf text-gold-500"></i><span>100% Natural</span>
+                    </div>
+                    <div class="flex items-center space-x-2 text-sm text-gray-700">
+                        <i class="fas fa-undo text-gold-500"></i><span>Easy Returns</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if related_products %}
+        <div class="mt-20">
+            <h2 class="font-heading text-3xl font-bold text-maroon-800 mb-8">You May Also Like</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                {% for rp in related_products %}
+                <a href="{% url 'shop:product_detail' rp.slug %}" class="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-gold-50 hover:-translate-y-1 duration-300">
+                    <div class="h-40 overflow-hidden">
+                        {% if rp.image %}
+                        <img src="{{ rp.image.url }}" alt="{{ rp.name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        {% else %}
+                        <div class="w-full h-full bg-gradient-to-br from-gold-100 to-maroon-100 flex items-center justify-center"><i class="fas fa-box text-3xl text-maroon-300"></i></div>
+                        {% endif %}
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-medium text-maroon-800 text-sm group-hover:text-gold-600 transition-colors truncate">{{ rp.name }}</h3>
+                        <p class="text-maroon-600 font-bold mt-1">₹{{ rp.effective_price }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

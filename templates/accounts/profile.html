@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% block title %}My Profile | Stainy Henna{% endblock %}
+
+{% block content %}
+<section class="relative py-24 min-h-screen bg-cover bg-center bg-no-repeat bg-fixed" style="background-image: url('https://images.unsplash.com/photo-1596400619079-0db35c345b1e?q=80&w=2070&auto=format&fit=crop');">
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-maroon-900/60 mix-blend-multiply"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-maroon-900/80 via-transparent to-maroon-900/80"></div>
+
+    <div class="relative z-10 max-w-5xl mx-auto px-4" data-aos="fade-up">
+        
+        <div class="flex flex-col md:flex-row gap-8">
+            <!-- Sidebar / Profile Summary (Glassmorphism) -->
+            <div class="md:w-1/3">
+                <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 text-center shadow-[0_8px_32px_0_rgba(31,38,135,0.37)] sticky top-24">
+                    <div class="w-32 h-32 mx-auto rounded-full bg-white/20 border-4 border-gold-400 p-1 mb-4 shadow-lg overflow-hidden backdrop-blur-md">
+                        {% if profile.profile_image %}
+                        <img src="{{ profile.profile_image.url }}" alt="Profile" class="w-full h-full object-cover rounded-full">
+                        {% else %}
+                        <div class="w-full h-full bg-maroon-800 rounded-full flex items-center justify-center text-gold-300 text-4xl font-bold">
+                            {{ user.first_name|first|default:user.username|first|upper }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <h2 class="font-heading text-2xl font-bold text-white mb-1">{{ user.get_full_name|default:user.username }}</h2>
+                    <p class="text-gold-200 text-sm mb-6">{{ user.email }}</p>
+                    
+                    <a href="{% url 'accounts:profile_update' %}" class="block w-full py-3 mb-3 bg-white/20 hover:bg-white/30 text-white font-medium rounded-xl transition-all border border-white/30 backdrop-blur-sm shadow-sm">
+                        <i class="fas fa-edit mr-2"></i> Edit Profile
+                    </a>
+                    <a href="{% url 'accounts:password_reset' %}" class="block w-full py-3 mb-6 bg-white/10 hover:bg-white/20 text-white font-medium rounded-xl transition-all border border-white/20 backdrop-blur-sm shadow-sm">
+                        <i class="fas fa-key mr-2"></i> Change Password
+                    </a>
+
+                    <div class="pt-6 border-t border-white/20 text-left space-y-4">
+                        <div class="flex items-center text-white/80 text-sm">
+                            <i class="fas fa-phone w-6 text-gold-400"></i>
+                            <span>{{ profile.phone|default:"Not provided" }}</span>
+                        </div>
+                        <div class="flex items-center text-white/80 text-sm">
+                            <i class="fas fa-map-marker-alt w-6 text-gold-400"></i>
+                            <span>{{ profile.city|default:"Not provided" }}</span>
+                        </div>
+                        <div class="flex items-center text-white/80 text-sm">
+                            <i class="fas fa-calendar-alt w-6 text-gold-400"></i>
+                            <span>Joined {{ user.date_joined|date:"M Y" }}</span>
+                        </div>
+                    </div>
+                    
+                    <form action="{% url 'accounts:logout' %}" method="post" class="mt-8">
+                        {% csrf_token %}
+                        <button type="submit" class="w-full py-3 text-red-300 hover:text-red-400 hover:bg-red-500/10 rounded-xl transition-all text-sm font-bold border border-transparent hover:border-red-500/30">
+                            <i class="fas fa-sign-out-alt mr-2"></i> Log Out
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="md:w-2/3 space-y-8">
+                
+                <!-- Recent Bookings -->
+                <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
+                    <div class="flex justify-between items-center mb-6 border-b border-white/20 pb-4">
+                        <h2 class="font-heading text-2xl font-bold text-white"><i class="fas fa-calendar-check text-gold-400 mr-2"></i> Recent Bookings</h2>
+                        <a href="{% url 'bookings:booking_list' %}" class="text-gold-300 hover:text-gold-400 text-sm font-medium transition-colors">View All</a>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        {% for booking in recent_bookings %}
+                        <div class="bg-white/10 border border-white/10 rounded-2xl p-5 hover:bg-white/20 transition-all backdrop-blur-md flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                            <div>
+                                <h3 class="font-bold text-white text-lg">{{ booking.service.name }}</h3>
+                                <p class="text-white/70 text-sm mt-1">
+                                    <i class="far fa-calendar-alt mr-1"></i> {{ booking.date|date:"M d, Y" }}
+                                    {% if booking.time_slot %} | <i class="far fa-clock mr-1"></i> {{ booking.time_slot.label }}{% endif %}
+                                </p>
+                            </div>
+                            <span class="px-3 py-1 text-xs font-bold rounded-full 
+                                {% if booking.status == 'confirmed' %}bg-green-500/20 text-green-300 border border-green-500/50
+                                {% elif booking.status == 'pending' %}bg-yellow-500/20 text-yellow-300 border border-yellow-500/50
+                                {% elif booking.status == 'completed' %}bg-blue-500/20 text-blue-300 border border-blue-500/50
+                                {% else %}bg-red-500/20 text-red-300 border border-red-500/50{% endif %}">
+                                {{ booking.get_status_display }}
+                            </span>
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-8">
+                            <i class="fas fa-calendar-alt text-4xl text-white/30 mb-3"></i>
+                            <p class="text-white/60">No bookings found.</p>
+                            <a href="{% url 'services:service_list' %}" class="inline-block mt-4 text-gold-400 hover:underline">Book a service</a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Recent Orders -->
+                <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
+                    <div class="flex justify-between items-center mb-6 border-b border-white/20 pb-4">
+                        <h2 class="font-heading text-2xl font-bold text-white"><i class="fas fa-box text-gold-400 mr-2"></i> Recent Orders</h2>
+                        <a href="{% url 'shop:order_history' %}" class="text-gold-300 hover:text-gold-400 text-sm font-medium transition-colors">View All</a>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        {% for order in recent_orders %}
+                        <a href="{% url 'shop:order_detail' order.order_number %}" class="block bg-white/10 border border-white/10 rounded-2xl p-5 hover:bg-white/20 transition-all backdrop-blur-md">
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                                <div>
+                                    <h3 class="font-bold text-white text-lg">Order {{ order.order_number }}</h3>
+                                    <p class="text-white/70 text-sm mt-1"><i class="far fa-calendar-alt mr-1"></i> {{ order.created_at|date:"M d, Y" }}</p>
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    <div class="text-right">
+                                        <p class="text-xs text-white/60">Amount</p>
+                                        <p class="font-bold text-gold-300">₹{{ order.total }}</p>
+                                    </div>
+                                    <span class="px-3 py-1 text-xs font-bold rounded-full 
+                                        {% if order.status == 'delivered' %}bg-green-500/20 text-green-300 border border-green-500/50
+                                        {% elif order.status == 'shipped' %}bg-blue-500/20 text-blue-300 border border-blue-500/50
+                                        {% elif order.status == 'pending' %}bg-yellow-500/20 text-yellow-300 border border-yellow-500/50
+                                        {% elif order.status == 'cancelled' %}bg-red-500/20 text-red-300 border border-red-500/50
+                                        {% else %}bg-white/20 text-white border border-white/50{% endif %}">
+                                        {{ order.get_status_display }}
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                        {% empty %}
+                        <div class="text-center py-8">
+                            <i class="fas fa-shopping-bag text-4xl text-white/30 mb-3"></i>
+                            <p class="text-white/60">No orders found.</p>
+                            <a href="{% url 'shop:product_list' %}" class="inline-block mt-4 text-gold-400 hover:underline">Shop products</a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

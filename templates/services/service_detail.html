@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block title %}{{ service.name }}{% endblock %}
+
+{% block content %}
+<section class="py-12 bg-gradient-to-b from-cream-100 to-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Breadcrumb -->
+        <nav class="mb-8 text-sm" data-aos="fade-up">
+            <a href="{% url 'services:service_list' %}" class="text-gray-500 hover:text-maroon-500 transition-colors">Services</a>
+            <span class="mx-2 text-gray-400">/</span>
+            <span class="text-maroon-600 font-medium">{{ service.name }}</span>
+        </nav>
+
+        <div class="grid lg:grid-cols-2 gap-12" data-aos="fade-up">
+            <!-- Image -->
+            <div class="relative rounded-2xl overflow-hidden shadow-xl">
+                {% if service.image %}
+                <img src="{{ service.image.url }}" alt="{{ service.name }}" class="w-full h-96 lg:h-full object-cover">
+                {% else %}
+                <div class="w-full h-96 bg-gradient-to-br from-maroon-100 to-gold-100 flex items-center justify-center">
+                    <i class="fas fa-hand-sparkles text-8xl text-maroon-300/50"></i>
+                </div>
+                {% endif %}
+                {% if service.has_discount %}
+                <div class="absolute top-4 right-4 bg-red-500 text-white text-sm font-bold px-4 py-2 rounded-full">SALE</div>
+                {% endif %}
+            </div>
+
+            <!-- Details -->
+            <div>
+                <span class="text-gold-600 font-medium tracking-widest uppercase text-sm">{{ service.category.name }}</span>
+                <h1 class="font-heading text-4xl font-bold text-maroon-800 mt-2">{{ service.name }}</h1>
+
+                <div class="flex items-center space-x-4 mt-4">
+                    <div class="flex items-center text-gray-600">
+                        <i class="fas fa-clock mr-2 text-gold-500"></i> {{ service.duration }}
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    {% if service.has_discount %}
+                    <span class="text-gray-400 line-through text-xl">₹{{ service.price }}</span>
+                    <span class="text-maroon-600 font-bold text-3xl ml-2 font-heading">₹{{ service.discount_price }}</span>
+                    {% else %}
+                    <span class="text-maroon-600 font-bold text-3xl font-heading">₹{{ service.price }}</span>
+                    {% endif %}
+                    <span class="text-gray-500 text-sm ml-2">per person</span>
+                </div>
+
+                <div class="mt-6 prose prose-sm text-gray-600 leading-relaxed">
+                    <p>{{ service.description }}</p>
+                </div>
+
+                <div class="mt-8 flex flex-wrap gap-4">
+                    <a href="{% url 'bookings:booking_create' %}?service={{ service.pk }}" class="px-8 py-4 bg-gradient-to-r from-gold-500 to-gold-600 text-maroon-900 rounded-full font-bold text-lg hover:from-gold-400 hover:to-gold-500 shadow-xl transition-all transform hover:scale-105">
+                        <i class="fas fa-calendar-plus mr-2"></i> Book This Service
+                    </a>
+                    <a href="https://wa.me/{{ whatsapp_number }}?text=Hi! I'm interested in {{ service.name }}" target="_blank" class="px-8 py-4 bg-green-500 text-white rounded-full font-bold text-lg hover:bg-green-600 shadow-xl transition-all transform hover:scale-105">
+                        <i class="fab fa-whatsapp mr-2"></i> Inquire
+                    </a>
+                </div>
+
+                <!-- Features -->
+                <div class="mt-8 grid grid-cols-2 gap-4">
+                    <div class="flex items-center space-x-2 text-sm text-gray-700">
+                        <i class="fas fa-check-circle text-green-500"></i><span>Professional Artist</span>
+                    </div>
+                    <div class="flex items-center space-x-2 text-sm text-gray-700">
+                        <i class="fas fa-check-circle text-green-500"></i><span>Organic Henna</span>
+                    </div>
+                    <div class="flex items-center space-x-2 text-sm text-gray-700">
+                        <i class="fas fa-check-circle text-green-500"></i><span>Home Service</span>
+                    </div>
+                    <div class="flex items-center space-x-2 text-sm text-gray-700">
+                        <i class="fas fa-check-circle text-green-500"></i><span>Custom Design</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Services -->
+        {% if related_services %}
+        <div class="mt-20">
+            <h2 class="font-heading text-3xl font-bold text-maroon-800 mb-8">Related Services</h2>
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {% for rs in related_services %}
+                <a href="{% url 'services:service_detail' rs.pk %}" class="group bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all border border-gold-50 hover:-translate-y-1 duration-300">
+                    <div class="h-40 overflow-hidden">
+                        {% if rs.image %}
+                        <img src="{{ rs.image.url }}" alt="{{ rs.name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        {% else %}
+                        <div class="w-full h-full bg-gradient-to-br from-maroon-100 to-gold-100 flex items-center justify-center">
+                            <i class="fas fa-hand-sparkles text-3xl text-maroon-300"></i>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="p-4">
+                        <h3 class="font-medium text-maroon-800 group-hover:text-gold-600 transition-colors">{{ rs.name }}</h3>
+                        <p class="text-maroon-600 font-bold mt-1">₹{{ rs.effective_price }}</p>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

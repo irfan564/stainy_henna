@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}Booking {{ booking.booking_number }}{% endblock %}
+{% block content %}
+<section class="py-12 bg-gradient-to-b from-cream-100 to-white">
+    <div class="max-w-3xl mx-auto px-4">
+        <nav class="mb-6 text-sm">
+            <a href="{% url 'bookings:booking_list' %}" class="text-gray-500 hover:text-maroon-500">Bookings</a>
+            <span class="mx-2 text-gray-400">/</span>
+            <span class="text-maroon-600 font-medium">{{ booking.booking_number }}</span>
+        </nav>
+
+        <div class="bg-white rounded-2xl shadow-lg border border-gold-100 overflow-hidden" data-aos="fade-up">
+            <div class="bg-gradient-to-r from-maroon-700 to-maroon-800 px-8 py-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+                <div>
+                    <h1 class="font-heading text-2xl font-bold text-white">Booking {{ booking.booking_number }}</h1>
+                    <p class="text-gold-300 text-sm mt-1">Created {{ booking.created_at|date:"M d, Y — h:i A" }}</p>
+                </div>
+                <span class="px-4 py-1.5 rounded-full text-sm font-medium
+                    {% if booking.status == 'confirmed' %}bg-green-500 text-white
+                    {% elif booking.status == 'pending' %}bg-yellow-500 text-white
+                    {% elif booking.status == 'completed' %}bg-blue-500 text-white
+                    {% else %}bg-red-500 text-white{% endif %}">
+                    {{ booking.get_status_display }}
+                </span>
+            </div>
+
+            <div class="p-8 space-y-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-cream-50 rounded-xl p-5 border border-gold-50">
+                        <h3 class="font-heading font-bold text-maroon-800 mb-3"><i class="fas fa-paint-brush text-gold-500 mr-2"></i> Service</h3>
+                        <p class="font-medium text-gray-800">{{ booking.service.name }}</p>
+                        <p class="text-sm text-gray-600 mt-1">{{ booking.service.category.name }}</p>
+                        {% if booking.total_price %}
+                        <p class="text-maroon-600 font-bold text-lg mt-2">₹{{ booking.total_price }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="bg-cream-50 rounded-xl p-5 border border-gold-50">
+                        <h3 class="font-heading font-bold text-maroon-800 mb-3"><i class="fas fa-calendar text-gold-500 mr-2"></i> Schedule</h3>
+                        <p class="font-medium text-gray-800">{{ booking.date|date:"l, M d, Y" }}</p>
+                        {% if booking.time_slot %}
+                        <p class="text-sm text-gray-600 mt-1">{{ booking.time_slot.label }}</p>
+                        {% endif %}
+                        <p class="text-sm text-gray-600 mt-1">{{ booking.guest_count }} person{{ booking.guest_count|pluralize }}</p>
+                    </div>
+                </div>
+
+                {% if booking.google_map_link %}
+                <div class="bg-cream-50 rounded-xl p-5 border border-gold-50">
+                    <h3 class="font-heading font-bold text-maroon-800 mb-3"><i class="fas fa-map-marked-alt text-gold-500 mr-2"></i> Google Maps Link</h3>
+                    <a href="{{ booking.google_map_link }}" target="_blank" class="font-medium text-blue-600 hover:text-blue-800 hover:underline break-all">{{ booking.google_map_link }}</a>
+                </div>
+                {% endif %}
+
+                {% if booking.venue_address %}
+                <div class="bg-cream-50 rounded-xl p-5 border border-gold-50">
+                    <h3 class="font-heading font-bold text-maroon-800 mb-3"><i class="fas fa-map-marker-alt text-gold-500 mr-2"></i> Venue</h3>
+                    <p class="text-gray-700">{{ booking.venue_address }}</p>
+                </div>
+                {% endif %}
+
+                {% if booking.notes %}
+                <div class="bg-cream-50 rounded-xl p-5 border border-gold-50">
+                    <h3 class="font-heading font-bold text-maroon-800 mb-3"><i class="fas fa-sticky-note text-gold-500 mr-2"></i> Notes</h3>
+                    <p class="text-gray-700">{{ booking.notes }}</p>
+                </div>
+                {% endif %}
+
+                {% if booking.admin_notes %}
+                <div class="bg-blue-50 rounded-xl p-5 border border-blue-200">
+                    <h3 class="font-heading font-bold text-blue-800 mb-3"><i class="fas fa-info-circle text-blue-500 mr-2"></i> Admin Response</h3>
+                    <p class="text-blue-700">{{ booking.admin_notes }}</p>
+                </div>
+                {% endif %}
+
+                {% if booking.status == 'pending' or booking.status == 'confirmed' %}
+                <div class="pt-4 border-t border-gold-100">
+                    <a href="{% url 'bookings:booking_cancel' booking.booking_number %}" onclick="return confirm('Are you sure you want to cancel this booking?')" class="px-6 py-2.5 bg-red-500 text-white rounded-full font-medium hover:bg-red-600 transition-all text-sm">
+                        <i class="fas fa-times mr-1"></i> Cancel Booking
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

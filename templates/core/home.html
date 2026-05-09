@@ -1,0 +1,274 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Luxury Mehandi Art{% endblock %}
+{% block meta_description %}Stainy Henna - Premium Mehandi Art & Henna Products. Book professional mehandi artists for bridal, party and festival occasions.{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Custom Styles for Swiper & Luxury Details */
+    .swiper-button-next, .swiper-button-prev {
+        color: #C8A951 !important;
+        background: rgba(255, 253, 249, 0.9);
+        width: 40px !important;
+        height: 40px !important;
+        border-radius: 50%;
+        border: 1px solid rgba(200, 169, 81, 0.3);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+    .swiper-button-next:after, .swiper-button-prev:after {
+        font-size: 16px !important;
+        font-weight: bold;
+    }
+    .swiper-button-next:hover, .swiper-button-prev:hover {
+        background: #C8A951;
+        color: white !important;
+        transform: scale(1.1);
+    }
+    .swiper-pagination-bullet {
+        background: #C8A951 !important;
+        opacity: 0.4;
+    }
+    .swiper-pagination-bullet-active {
+        opacity: 1;
+        width: 24px;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+    }
+    
+    /* Instagram Hover Effect */
+    .ig-overlay {
+        background: linear-gradient(to top, rgba(74, 0, 17, 0.8), rgba(74, 0, 17, 0.2));
+    }
+    
+    /* Smooth Image Loading */
+    .img-fade {
+        animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(1.05); }
+        to { opacity: 1; transform: scale(1); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- 1. Hero Section -->
+<section class="relative h-[90vh] md:h-screen flex items-center justify-center overflow-hidden bg-maroon-900">
+    <!-- Background Image with Parallax feel -->
+    <div class="absolute inset-0 z-0 bg-maroon-900">
+        <img src="https://images.unsplash.com/photo-1596400619079-0db35c345b1e?auto=format&fit=crop&w=1200&q=80" 
+             alt="Luxury Henna" 
+             class="w-full h-full object-cover object-center opacity-40 animate-slow-pan"
+             fetchpriority="high">
+        <div class="absolute inset-0 bg-gradient-to-b from-maroon-900/60 via-maroon-900/40 to-maroon-900/90"></div>
+    </div>
+
+    <!-- Hero Content -->
+    <div class="relative z-10 text-center px-4 max-w-5xl mx-auto mt-16 md:mt-0">
+        <div data-aos="fade-down" data-aos-duration="1200" class="inline-flex items-center px-5 py-2 bg-white/10 backdrop-blur-md rounded-full mb-6 border border-gold-400/30">
+            <span class="text-gold-300 text-xs md:text-sm font-medium tracking-[0.2em] uppercase">Bespoke Bridal Artistry</span>
+        </div>
+        
+        <h1 data-aos="zoom-in" data-aos-duration="1500" data-aos-delay="200" class="font-heading text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-tight mb-6 drop-shadow-2xl">
+            Stainy <span class="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 via-gold-500 to-gold-300">Henna</span>
+        </h1>
+        
+        <p data-aos="fade-up" data-aos-duration="1200" data-aos-delay="400" class="text-gray-200 text-base md:text-xl font-light tracking-wide mb-10 max-w-2xl mx-auto drop-shadow-md">
+            Elevating traditions with exquisite, custom-crafted mehandi designs for your most unforgettable moments.
+        </p>
+        
+        <div data-aos="fade-up" data-aos-duration="1200" data-aos-delay="600" class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="{% url 'bookings:booking_create' %}" class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-gold-400 to-gold-600 text-maroon-900 rounded-full font-semibold tracking-wide hover:shadow-[0_0_30px_rgba(200,169,81,0.5)] transition-all transform hover:-translate-y-1">
+                Book Your Date
+            </a>
+            <a href="#services" class="w-full sm:w-auto px-8 py-4 border border-white/30 text-white rounded-full font-medium backdrop-blur-sm hover:bg-white/10 hover:border-gold-400 hover:text-gold-300 transition-all">
+                Explore Services
+            </a>
+        </div>
+    </div>
+
+    <!-- Scroll Indicator -->
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center animate-bounce">
+        <span class="text-gold-400/70 text-xs uppercase tracking-widest mb-2 font-medium">Scroll</span>
+        <i class="fas fa-chevron-down text-gold-400/70"></i>
+    </div>
+</section>
+
+
+
+<!-- 3. Services Showcase (Swiper) -->
+<section id="services" class="py-24 bg-white relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-12" data-aos="fade-up">
+            <div>
+                <span class="text-gold-500 font-medium tracking-[0.15em] uppercase text-xs">Curated Offerings</span>
+                <h2 class="font-heading text-4xl md:text-5xl font-bold text-maroon-900 mt-2">Luxury Services</h2>
+            </div>
+            <a href="{% url 'services:service_list' %}" class="hidden md:inline-flex items-center text-sm font-medium text-maroon-700 hover:text-gold-600 transition-colors">
+                View Collection <i class="fas fa-arrow-right ml-2 text-xs"></i>
+            </a>
+        </div>
+
+        <div class="swiper services-swiper pb-16" data-aos="fade-up" data-aos-delay="200">
+            <div class="swiper-wrapper">
+                {% for service in featured_services %}
+                <div class="swiper-slide h-auto">
+                    <div class="group bg-white rounded-2xl h-full flex flex-col border border-cream-200 shadow-sm hover:shadow-2xl transition-all duration-500 overflow-hidden">
+                        <div class="relative h-64 overflow-hidden">
+                            {% if service.image %}
+                            <img src="{{ service.image.url }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="{{ service.name }}">
+                            {% else %}
+                            <div class="w-full h-full bg-cream-100 flex items-center justify-center">
+                                <i class="fas fa-spa text-5xl text-gold-300"></i>
+                            </div>
+                            {% endif %}
+                            <div class="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-maroon-900 shadow-sm">
+                                {{ service.category.name }}
+                            </div>
+                        </div>
+                        <div class="p-6 flex flex-col flex-grow">
+                            <h3 class="font-heading text-xl font-bold text-maroon-900 mb-2">{{ service.name }}</h3>
+                            <p class="text-gray-500 text-sm font-light line-clamp-2 mb-4 flex-grow">{{ service.short_description|default:service.description|truncatewords:15 }}</p>
+                            
+                            <div class="flex items-center justify-between mt-auto pt-4 border-t border-cream-200">
+                                <div class="text-maroon-900 font-semibold">
+                                    {% if service.has_discount %}
+                                    <span class="text-gray-400 line-through text-xs font-normal mr-1">₹{{ service.price }}</span>
+                                    <span>₹{{ service.discount_price }}</span>
+                                    {% else %}
+                                    <span>₹{{ service.price }}</span>
+                                    {% endif %}
+                                </div>
+                                <a href="{% url 'bookings:booking_create' %}?service={{ service.pk }}" class="text-gold-600 text-sm font-medium hover:text-maroon-900 transition-colors">
+                                    Book <i class="fas fa-chevron-right text-[10px] ml-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="swiper-slide">
+                    <div class="text-center py-12 bg-cream-50 rounded-2xl border border-cream-200">
+                        <i class="fas fa-leaf text-4xl text-gold-300 mb-3"></i>
+                        <h3 class="font-heading text-xl text-maroon-900">Curating Services</h3>
+                        <p class="text-sm text-gray-500">Check back soon for our luxury offerings.</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+        </div>
+        
+        <!-- Mobile View All Link -->
+        <div class="text-center mt-4 md:hidden">
+            <a href="{% url 'services:service_list' %}" class="inline-flex items-center text-sm font-medium text-maroon-700 border-b border-maroon-700 pb-1">
+                View Full Collection <i class="fas fa-arrow-right ml-2 text-xs"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- 4. Product Showcase (Swiper) -->
+{% if featured_products %}
+<section class="py-24 bg-maroon-900 text-white relative overflow-hidden">
+    <!-- Decorative background -->
+    <div class="absolute top-0 right-0 w-96 h-96 bg-gold-600/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-gold-600/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center mb-16" data-aos="fade-up">
+            <h2 class="font-heading text-4xl md:text-5xl font-bold text-white mb-4">The Organic Shop</h2>
+            <p class="text-gold-200/80 max-w-2xl mx-auto text-sm md:text-base font-light">Premium, freshly crafted organic henna cones and essential oils for the deepest stain.</p>
+        </div>
+
+        <div class="swiper products-swiper pb-16" data-aos="fade-up" data-aos-delay="200">
+            <div class="swiper-wrapper">
+                {% for product in featured_products %}
+                <div class="swiper-slide h-auto">
+                    <a href="{% url 'shop:product_detail' product.slug %}" class="group block h-full">
+                        <div class="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-4 h-full flex flex-col hover:bg-white/10 transition-all duration-300">
+                            <div class="relative w-full aspect-square rounded-xl overflow-hidden mb-4 bg-maroon-800">
+                                {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                                {% else %}
+                                <div class="w-full h-full flex items-center justify-center"><i class="fas fa-box text-3xl text-gold-500/50"></i></div>
+                                {% endif %}
+                                {% if product.has_discount %}
+                                <div class="absolute top-3 left-3 bg-gold-500 text-maroon-900 text-[10px] uppercase tracking-wider font-bold px-2 py-1 rounded-sm">Sale</div>
+                                {% endif %}
+                            </div>
+                            <h3 class="font-medium text-white text-base group-hover:text-gold-400 transition-colors line-clamp-1">{{ product.name }}</h3>
+                            <div class="mt-2 flex items-center justify-between">
+                                <div class="text-gold-300 font-semibold text-sm">
+                                    {% if product.has_discount %}
+                                    <span>₹{{ product.discount_price }}</span>
+                                    {% else %}
+                                    <span>₹{{ product.price }}</span>
+                                    {% endif %}
+                                </div>
+                                <span class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-gold-500 group-hover:text-maroon-900 transition-colors">
+                                    <i class="fas fa-shopping-bag text-xs"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+        </div>
+        
+        <div class="text-center mt-8">
+            <a href="{% url 'shop:product_list' %}" class="inline-flex items-center px-8 py-3 border border-gold-500 text-gold-400 rounded-full text-sm font-medium hover:bg-gold-500 hover:text-maroon-900 transition-all">
+                Shop All Products
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Services Swiper
+        const servicesSwiper = new Swiper('.services-swiper', {
+            slidesPerView: 1.2,
+            spaceBetween: 20,
+            loop: false,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            breakpoints: {
+                640: { slidesPerView: 2.2, spaceBetween: 24 },
+                1024: { slidesPerView: 3, spaceBetween: 32 },
+            }
+        });
+
+        // Products Swiper
+        const productsSwiper = new Swiper('.products-swiper', {
+            slidesPerView: 2,
+            spaceBetween: 16,
+            loop: false,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            breakpoints: {
+                640: { slidesPerView: 3, spaceBetween: 20 },
+                1024: { slidesPerView: 4, spaceBetween: 24 },
+            }
+        });
+
+
+    });
+</script>
+{% endblock %}

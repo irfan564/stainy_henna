@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} | Admin Dashboard{% endblock %}
+{% block navbar %}{% endblock %}
+
+{% block content %}
+<section class="relative py-24 min-h-screen bg-cover bg-center bg-no-repeat bg-fixed" style="background-image: url('https://images.unsplash.com/photo-1596400619079-0db35c345b1e?q=80&w=2070&auto=format&fit=crop');">
+    <!-- Overlay -->
+    <div class="absolute inset-0 bg-maroon-900/70 mix-blend-multiply"></div>
+    <div class="absolute inset-0 bg-gradient-to-b from-maroon-900/90 via-transparent to-maroon-900/90"></div>
+
+    <div class="relative z-10 max-w-4xl mx-auto px-4" data-aos="fade-up">
+        
+        <div class="mb-6 flex items-center justify-between">
+            <a href="{% url 'dashboard:manage_products' %}" class="text-white/80 hover:text-gold-300 transition-colors flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i> Back to Products
+            </a>
+        </div>
+
+        <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-[0_8px_32px_0_rgba(31,38,135,0.37)]">
+            <h1 class="font-heading text-3xl font-bold text-white mb-6"><i class="fas {% if product %}fa-edit{% else %}fa-plus-circle{% endif %} text-gold-400 mr-2"></i> {{ title }}</h1>
+            
+            <form method="POST" enctype="multipart/form-data" class="space-y-6">
+                {% csrf_token %}
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Name & Category -->
+                    <div class="space-y-2 md:col-span-2">
+                        <label class="block text-white/80 text-sm font-medium pl-1">Product Name *</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}<p class="text-red-300 text-xs mt-1 pl-1">{{ form.name.errors.0 }}</p>{% endif %}
+                    </div>
+
+                    <div class="space-y-2 md:col-span-2">
+                        <label class="block text-white/80 text-sm font-medium pl-1">Category *</label>
+                        {{ form.category }}
+                        {% if form.category.errors %}<p class="text-red-300 text-xs mt-1 pl-1">{{ form.category.errors.0 }}</p>{% endif %}
+                    </div>
+
+                    <!-- Descriptions -->
+                    <div class="space-y-2 md:col-span-2">
+                        <label class="block text-white/80 text-sm font-medium pl-1">Short Description</label>
+                        {{ form.short_description }}
+                        {% if form.short_description.errors %}<p class="text-red-300 text-xs mt-1 pl-1">{{ form.short_description.errors.0 }}</p>{% endif %}
+                    </div>
+
+                    <div class="space-y-2 md:col-span-2">
+                        <label class="block text-white/80 text-sm font-medium pl-1">Full Description *</label>
+                        {{ form.description }}
+                        {% if form.description.errors %}<p class="text-red-300 text-xs mt-1 pl-1">{{ form.description.errors.0 }}</p>{% endif %}
+                    </div>
+
+                    <!-- Pricing & Stock -->
+                    <div class="space-y-2">
+                        <label class="block text-white/80 text-sm font-medium pl-1">Regular Price *</label>
+                        {{ form.price }}
+                        {% if form.price.errors %}<p class="text-red-300 text-xs mt-1 pl-1">{{ form.price.errors.0 }}</p>{% endif %}
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="block text-white/80 text-sm font-medium pl-1">Discount Price</label>
+                        {{ form.discount_price }}
+                        {% if form.discount_price.errors %}<p class="text-red-300 text-xs mt-1 pl-1">{{ form.discount_price.errors.0 }}</p>{% endif %}
+                    </div>
+
+                    <div class="space-y-2 md:col-span-2">
+                        <label class="block text-white/80 text-sm font-medium pl-1">Stock Quantity *</label>
+                        {{ form.stock }}
+                        {% if form.stock.errors %}<p class="text-red-300 text-xs mt-1 pl-1">{{ form.stock.errors.0 }}</p>{% endif %}
+                    </div>
+
+                    <!-- Images -->
+                    <div class="space-y-2 md:col-span-2 border-t border-white/10 pt-6 mt-2">
+                        <label class="block text-white/80 text-sm font-medium pl-1 mb-3">Product Images</label>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-white/60 text-xs mb-1">Primary Image</label>
+                                {{ form.image }}
+                                {% if product.image %}
+                                <p class="text-white/50 text-xs mt-1">Current: <a href="{{ product.image.url }}" target="_blank" class="text-gold-400 hover:underline">View</a></p>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <label class="block text-white/60 text-xs mb-1">Image 2 (Optional)</label>
+                                {{ form.image_2 }}
+                            </div>
+                            <div>
+                                <label class="block text-white/60 text-xs mb-1">Image 3 (Optional)</label>
+                                {{ form.image_3 }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flags -->
+                    <div class="space-y-4 md:col-span-2 border-t border-white/10 pt-6 mt-2 flex flex-wrap gap-8">
+                        <div class="flex items-center">
+                            {{ form.is_active }}
+                            <label class="ml-2 text-white/90 text-sm font-medium">Product is Active (Visible to customers)</label>
+                        </div>
+                        <div class="flex items-center">
+                            {{ form.is_featured }}
+                            <label class="ml-2 text-white/90 text-sm font-medium">Feature on Homepage</label>
+                        </div>
+                    </div>
+                </div>
+
+                {% if form.non_field_errors %}
+                <div class="bg-red-500/20 backdrop-blur-md border border-red-500/50 text-white text-sm p-4 rounded-xl">
+                    {% for error in form.non_field_errors %}
+                        <p><i class="fas fa-exclamation-circle mr-1"></i> {{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="flex justify-end gap-4 mt-8 pt-6 border-t border-white/10">
+                    <a href="{% url 'dashboard:manage_products' %}" class="px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl font-medium transition-all">Cancel</a>
+                    <button type="submit" class="px-8 py-3 bg-gradient-to-r from-gold-400 to-gold-600 text-maroon-900 font-bold rounded-xl shadow-[0_4px_15px_rgba(200,169,81,0.4)] hover:shadow-[0_8px_25px_rgba(200,169,81,0.6)] transform hover:-translate-y-1 transition-all">
+                        {{ button_text }} <i class="fas fa-save ml-2"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

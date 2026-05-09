@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Our Services{% endblock %}
+{% block meta_description %}Explore our premium mehandi services including bridal, party, festival, and Arabic designs.{% endblock %}
+
+{% block content %}
+<section class="relative py-24 bg-gradient-to-br from-maroon-800 to-maroon-900 overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-10 right-10 w-48 h-48 border border-gold-400 rounded-full"></div>
+    </div>
+    <div class="max-w-4xl mx-auto px-4 text-center relative z-10" data-aos="fade-up">
+        <span class="text-gold-400 font-medium tracking-widest uppercase text-sm">What We Offer</span>
+        <h1 class="font-heading text-5xl md:text-6xl font-bold text-white mt-3">Our Services</h1>
+        <div class="w-24 h-1 bg-gradient-to-r from-gold-400 to-gold-600 mx-auto mt-6 rounded-full"></div>
+    </div>
+</section>
+
+<section class="py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Category Filter -->
+        <div class="flex flex-wrap justify-center gap-3 mb-12" data-aos="fade-up">
+            <a href="{% url 'services:service_list' %}" class="px-5 py-2 rounded-full text-sm font-medium transition-all {% if not selected_category %}bg-maroon-500 text-white shadow-lg{% else %}bg-cream-100 text-gray-700 hover:bg-maroon-50 border border-gold-200{% endif %}">
+                All Services
+            </a>
+            {% for cat in categories %}
+            <a href="?category={{ cat.pk }}" class="px-5 py-2 rounded-full text-sm font-medium transition-all {% if selected_category == cat.pk|slugify %}bg-maroon-500 text-white shadow-lg{% else %}bg-cream-100 text-gray-700 hover:bg-maroon-50 border border-gold-200{% endif %}">
+                {{ cat.name }}
+            </a>
+            {% endfor %}
+        </div>
+
+        <!-- Services Grid -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for service in services %}
+            <div class="group bg-cream-50 rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-gold-100" data-aos="fade-up" data-aos-delay="{{ forloop.counter0 }}50">
+                <div class="relative h-56 overflow-hidden">
+                    {% if service.image %}
+                    <img src="{{ service.image.url }}" alt="{{ service.name }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    {% else %}
+                    <div class="w-full h-full bg-gradient-to-br from-maroon-100 to-gold-100 flex items-center justify-center">
+                        <i class="fas fa-hand-sparkles text-5xl text-maroon-300"></i>
+                    </div>
+                    {% endif %}
+                    {% if service.has_discount %}
+                    <div class="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">SALE</div>
+                    {% endif %}
+                    <div class="absolute top-4 left-4 bg-white/90 text-maroon-700 text-xs font-medium px-3 py-1 rounded-full">
+                        <i class="fas fa-clock mr-1"></i> {{ service.duration }}
+                    </div>
+                </div>
+                <div class="p-6">
+                    <span class="text-xs font-medium text-gold-600 uppercase tracking-wider">{{ service.category.name }}</span>
+                    <h3 class="font-heading text-xl font-bold text-maroon-800 mt-2 group-hover:text-gold-600 transition-colors">{{ service.name }}</h3>
+                    <p class="text-gray-600 text-sm mt-2 line-clamp-2">{{ service.short_description|default:service.description|truncatewords:20 }}</p>
+                    <div class="flex items-center justify-between mt-4 pt-4 border-t border-gold-100">
+                        <div>
+                            {% if service.has_discount %}
+                            <span class="text-gray-400 line-through text-sm">₹{{ service.price }}</span>
+                            <span class="text-maroon-600 font-bold text-lg ml-1">₹{{ service.discount_price }}</span>
+                            {% else %}
+                            <span class="text-maroon-600 font-bold text-lg">₹{{ service.price }}</span>
+                            {% endif %}
+                        </div>
+                        <a href="{% url 'services:service_detail' service.pk %}" class="px-4 py-2 bg-maroon-500 text-white text-sm rounded-full hover:bg-maroon-600 transition-colors">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full text-center py-16">
+                <i class="fas fa-hand-sparkles text-6xl text-gold-300 mb-4"></i>
+                <h3 class="font-heading text-2xl text-maroon-700">No services available</h3>
+                <p class="text-gray-500 mt-2">Check back soon for our amazing mehandi services!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
