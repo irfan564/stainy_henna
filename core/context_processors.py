@@ -3,7 +3,7 @@ def global_context(request):
     return {
         'site_name': 'Stainy Henna',
         'site_tagline': 'Luxury Mehandi Art & Henna Products',
-        'whatsapp_number': '918075176518',
+        'whatsapp_number': '918086613259',
         'whatsapp_message': 'Hello Stainy Henna! I would like to know more about your services.',
         'business_email': 'hello@stainyhenna.com',
         'business_phone': '+91 8086613259',
